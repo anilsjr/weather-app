@@ -84,7 +84,7 @@ function displaySavedCities() {
 
     // Create a remove button
     const removeButton = document.createElement("button");
-    removeButton.className = "btn btn-danger btn-sm";
+    removeButton.className = "btn btn-danger btn-sm ml-2";
     removeButton.textContent = "Remove";
     removeButton.addEventListener("click", (event) => {
       event.stopPropagation(); // Prevent triggering the cityElement click event
