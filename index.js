@@ -1,15 +1,25 @@
 const apikey = "0ca586ad6024c536c2328175d756a921";
 
 const weatherDataEl = document.getElementById("weather-data");
-
 const cityInputEl = document.getElementById("city-input");
-
 const formEl = document.querySelector("form");
+const suggestionsEl = document.getElementById("suggestions");
 
 formEl.addEventListener("submit", (event) => {
   event.preventDefault();
   const cityValue = cityInputEl.value;
   getWeatherData(cityValue);
+  saveCity(cityValue);
+  displaySavedCities();
+});
+
+cityInputEl.addEventListener("input", () => {
+  const query = cityInputEl.value;
+  if (query) {
+    showSuggestions(query);
+  } else {
+    clearSuggestions();
+  }
 });
 
 async function getWeatherData(cityValue) {
@@ -25,11 +35,8 @@ async function getWeatherData(cityValue) {
     const data = await response.json();
 
     const temperature = Math.round(data.main.temp);
-
     const description = data.weather[0].description;
-
     const icon = data.weather[0].icon;
-
     const details = [
       `Feels like: ${Math.round(data.main.feels_like)}`,
       `Humidity: ${data.main.humidity}%`,
@@ -52,7 +59,39 @@ async function getWeatherData(cityValue) {
     weatherDataEl.querySelector(".temperature").textContent = "";
     weatherDataEl.querySelector(".description").textContent =
       "An error happened, please try again later";
-
     weatherDataEl.querySelector(".details").innerHTML = "";
   }
 }
+
+function saveCity(city) {
+  let cities = JSON.parse(localStorage.getItem("savedCities")) || [];
+  if (!cities.includes(city)) {
+    cities.push(city);
+    localStorage.setItem("savedCities", JSON.stringify(cities));
+  }
+}
+
+function displaySavedCities() {
+  const cities = JSON.parse(localStorage.getItem("savedCities")) || [];
+  suggestionsEl.innerHTML = "";
+  cities.forEach((city) => {
+    const cityElement = document.createElement("a");
+    cityElement.className = "list-group-item list-group-item-action";
+    cityElement.textContent = city;
+    cityElement.addEventListener("click", () => {
+      getWeatherData(city);
+    });
+    suggestionsEl.appendChild(cityElement);
+  });
+}
+
+function showSuggestions(query) {
+  // Implement a function to fetch and display city suggestions based on the query
+}
+
+function clearSuggestions() {
+  suggestionsEl.innerHTML = "";
+}
+
+// Initialize saved cities on page load
+document.addEventListener("DOMContentLoaded", displaySavedCities);
