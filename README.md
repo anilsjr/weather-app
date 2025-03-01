@@ -1,5 +1,5 @@
 # Whether App
-Live: https://anilsjr.github.io/whether-app
+Live: https://anilsjr.github.io/weather-app
 
 ## Introduction
 The Whether App is a simple weather application built using JavaScript, CSS, and HTML. It allows users to check the current weather conditions for a specified location.
