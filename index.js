@@ -81,8 +81,27 @@ function displaySavedCities() {
     cityElement.addEventListener("click", () => {
       getWeatherData(city);
     });
+
+    // Create a remove button
+    const removeButton = document.createElement("button");
+    removeButton.className = "btn btn-danger btn-sm";
+    removeButton.textContent = "Remove";
+    removeButton.addEventListener("click", (event) => {
+      event.stopPropagation(); // Prevent triggering the cityElement click event
+      removeCity(city);
+      displaySavedCities(); // Refresh the list after removing the city
+    });
+
+    // Append the remove button to the city element
+    cityElement.appendChild(removeButton);
     suggestionsEl.appendChild(cityElement);
   });
+}
+
+function removeCity(city) {
+  let cities = JSON.parse(localStorage.getItem("savedCities")) || [];
+  cities = cities.filter((savedCity) => savedCity !== city);
+  localStorage.setItem("savedCities", JSON.stringify(cities));
 }
 
 function showSuggestions(query) {
